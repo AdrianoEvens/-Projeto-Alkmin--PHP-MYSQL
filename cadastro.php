@@ -1,45 +1,29 @@
-
 <?php
 
-    include('conexao.php');
-  
+//Código para realizar a conexão com o banco de dados.
 
-    if(isset($_POST['email']) || isset($_POST['senha'])){
-        if(strlen($_POST['email']) == 0){
-           echo "<div class='alert alert-danger'>'Preencha o E-mail'</div>";
-        } else if(strlen($_POST['senha']) == 0){
-            echo "<div class='alert alert-danger'>'Preencha  a senha '</div>";
-        } else{
-
-            $email = $dbc->real_escape_string($_POST['email']);
-            $senha = $dbc->real_escape_string($_POST['senha']);
-  /*Verifica se há um usuário cadastrado com as informações de email e senha passados*/
-            $sql = "SELECT * FROM usuarios WHERE email = '$email' AND senha = '$senha'";
-            $query = $dbc->query($sql) or die("Falha na execução do código SQL: " . $dbc->error);
-            
-            $registros = $query->num_rows;
-
-            if($registros == 1){
-                $usuario = $query->fetch_assoc();
-                
-                if(!isset($_SESSION)){
-                    session_start();
-                }
-
-                $_SESSION['id'] = $usuario['id'];
-                $_SESSION['nome'] = $usuario['nome'];
-                $_SESSION['foto'] = $usuario['foto'];
-
-                header("Location: ../index.php");
-            } else{
-                echo "Falha ao logar, email ou senha incorretos";
-            }
-        }
-    }
-
+require_once("conexao.php");
 
 ?>
 
+
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.98.0">
+    <title>Login - Projeto Alkmin</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sign-in/">
+
+    
+
+    
+
+    <!-- CSS padrão do template do bootstrap -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -94,19 +78,29 @@
       }
     </style>
 
-<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+  <!-- Códigos abaixo são utilizados para criar e formatar o formulário,
+  utilizamos o bootstrap também -->
     <link href="../css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
     
 <main class="form-signin w-100 m-auto">
-  <form  name="cadastro" method="POST" action="">
+  <form enctype="multipart/form-data" name="cadastro" method="POST" action="cadastrosis.php">
     <img class="mb-4" src="../img/logoprojeto.png" alt="" width="150" height="150">
-    <h1 class="h3 mb-3 fw-normal">Entre em sua conta</h1>
-    
+    <h1 class="h3 mb-3 fw-normal">Cadastre-se</h1>
     <div class="form-floating">
-      <input type="email" class="form-control" name="email" placeholder="Digite seu E-mail" 
+      <input type="text" class="form-control" name="nome" maxlength="190" placeholder="Digite seu nome completo" 
+     >
+      <label for="floatingInput">Nome completo</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" class="form-control" name="cpf" maxlength="11" autocomplete="off" placeholder="Digite seu CPF" 
+      >
+      <label for="floatingInput">CPF</label>
+    </div>
+    <div class="form-floating">
+      <input type="email" class="form-control" name="email" maxlength="200" placeholder="Digite seu E-mail" 
       >
       <label for="floatingInput">E-mail</label>
     </div>
@@ -115,16 +109,25 @@
       >
       <label for="floatingPassword">Senha</label>
     </div>
+    <div class="form-floating">
+      <input type="file" class="form-control" name="foto" 
+      >
+      <label for="floatingPassword">Foto de Perfil</label>
+    </div>
 
  
 
     <div class="checkbox mb-3">
     </div>
+
+    <!-- Código do botão para enviar os dados preenchidos no formulário -->
     
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Entrar</button>
-    <a href="cadastro.php">Cadastrar-se</a>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Cadastrar</button>
+    <a href="login.php">Entrar</a>
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
 
+    
+    <input type="hidden" name="enviou" value ="true"/>
   </form>
 </main>
 
@@ -132,4 +135,3 @@
 
 </body>
 </html>
-
